@@ -45,20 +45,21 @@ if st.button("Buat Laporan"):
 
     judul_list = []
 
-    for link in links:
-        try:
-            r = requests.get(link, timeout=10)
-            soup = BeautifulSoup(r.text, "html.parser")
+for link in links:
+    try:
+        # Ambil bagian terakhir URL
+        slug = link.rstrip("/").split("/")[-1]
 
-            if soup.title and soup.title.string:
-                title = soup.title.string.strip()
-            else:
-                title = "Judul tidak ditemukan"
+        # Ganti - jadi spasi
+        slug = slug.replace("-", " ")
 
-            judul_list.append(title)
+        # Kapitalisasi awal kata
+        title = slug.title()
 
-        except:
-            judul_list.append("Judul tidak ditemukan")
+        judul_list.append(title)
+
+    except:
+        judul_list.append("Judul tidak ditemukan")
 
     row.cells[2].text = "\n".join([f"{i+1}. {j}" for i, j in enumerate(judul_list)])
     row.cells[3].text = "\n".join([f"{i+1}. {l}" for i, l in enumerate(links)])
