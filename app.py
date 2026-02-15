@@ -37,7 +37,19 @@ if st.button("Buat Laporan"):
     row = table.rows[1]
     row.cells[0].text = "1"
     row.cells[1].text = datetime.now().strftime("%d/%m/%Y")
-    row.cells[2].text = "Rekap Publikasi Media Online"
+    judul_list = []
+
+for link in links:
+    try:
+        r = requests.get(link, timeout=10)
+        soup = BeautifulSoup(r.text, "html.parser")
+        title = soup.title.string.strip()
+        judul_list.append(title)
+    except:
+        judul_list.append("Judul tidak ditemukan")
+
+row.cells[2].text = "\n".join([f"{i+1}. {j}" for i, j in enumerate(judul_list)])
+
     row.cells[3].text = "\n".join([f"{i+1}. {l}" for i, l in enumerate(links)])
 
     for i, link in enumerate(links, start=1):
