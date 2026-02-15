@@ -7,7 +7,7 @@ import os
 
 st.title("Dashboard Laporan Rekap Publikasi Media Online")
 
-SCREENSHOT_API_KEY = os.getenv("NyJTnwDZX1Wjmw")
+SCREENSHOT_API_KEY = os.getenv("SCREENSHOT_API_KEY")
 
 links_input = st.text_area("Masukkan link (1 link per baris)")
 
