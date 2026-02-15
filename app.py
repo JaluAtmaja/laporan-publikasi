@@ -1,4 +1,18 @@
+import streamlit as st
+import requests
+from docx import Document
+from docx.shared import Inches
+from datetime import datetime
+import os
+
+st.title("Dashboard Laporan Rekap Publikasi Media Online")
+
+SCREENSHOT_API_KEY = os.getenv("SCREENSHOT_API_KEY")
+
+links_input = st.text_area("Masukkan link (1 link per baris)")
+
 if st.button("Buat Laporan"):
+
 
     if links_input.strip() == "":
         st.warning("Masukkan link terlebih dahulu.")
