@@ -5,6 +5,7 @@ from docx.shared import Inches
 from datetime import datetime
 import os
 import urllib.parse
+from bs4 import BeautifulSoup  # WAJIB
 
 st.title("Dashboard Laporan Rekap Publikasi Media Online")
 
@@ -37,20 +38,34 @@ if st.button("Buat Laporan"):
     row = table.rows[1]
     row.cells[0].text = "1"
     row.cells[1].text = datetime.now().strftime("%d/%m/%Y")
+
+    # =========================
+    # AMBIL JUDUL OTOMATIS
+    # =========================
+
     judul_list = []
 
-for link in links:
-    try:
-        r = requests.get(link, timeout=10)
-        soup = BeautifulSoup(r.text, "html.parser")
-        title = soup.title.string.strip()
-        judul_list.append(title)
-    except:
-        judul_list.append("Judul tidak ditemukan")
+    for link in links:
+        try:
+            r = requests.get(link, timeout=10)
+            soup = BeautifulSoup(r.text, "html.parser")
 
-row.cells[2].text = "\n".join([f"{i+1}. {j}" for i, j in enumerate(judul_list)])
+            if soup.title and soup.title.string:
+                title = soup.title.string.strip()
+            else:
+                title = "Judul tidak ditemukan"
 
+            judul_list.append(title)
+
+        except:
+            judul_list.append("Judul tidak ditemukan")
+
+    row.cells[2].text = "\n".join([f"{i+1}. {j}" for i, j in enumerate(judul_list)])
     row.cells[3].text = "\n".join([f"{i+1}. {l}" for i, l in enumerate(links)])
+
+    # =========================
+    # SCREENSHOT
+    # =========================
 
     for i, link in enumerate(links, start=1):
         try:
